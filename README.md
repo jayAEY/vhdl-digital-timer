@@ -1,22 +1,23 @@
-# ⏱️ Cascading VHDL 4-Digit Digital Timer
+# ⏱️ VHDL Four-Digit Digital Timer
 
-A modular **4-digit digital timer (MM:SS)** written in VHDL for a Digital Systems lab assignment. 
-Built upon an instructor-provided template, this project expands the base code into a cascading time-tracking core that outputs directly to an FPGA board's 7-segment displays in hex.
+A four-digit MM:SS digital timer implemented in VHDL and deployed on a DE10-Lite FPGA development board.
 
----
-
-## 🚀 Lab Implementation Details
-
-* **Cascading Counter Topology** → Interlinked counter blocks via dynamic output enable lines for precise rollovers.
-* **Dual Time Domains** → Structural isolation managing Minute Tens, Minute Ones, Second Tens, and Second Ones.
-* **Hex Decoding Interface** → Decodes 4-bit binary values into active-low 7-segment array codes.
-* **Variable Prescalar Division** → Scales simulation timelines and physical hardware timing.
+The design uses cascaded modulo counters, clock division logic, and 7-segment display drivers to track and display elapsed time. The project was completed as part of a Digital Systems course lab.
 
 ---
 
-## ⚙️ Project Architecture & Signal Flow
+## 🚀 Key Features
 
-| Component Group | Component Mapping | Target Display Output | Modulo Property (M) | Bit-Width Flag (N) |
+* Cascaded modulo counters for seconds and minutes rollover.
+* Independent counter stages for minute tens, minute ones, second tens, and second ones.
+* 7-segment display decoding for FPGA display output.
+* Configurable clock division for simulation and hardware deployment.
+  
+---
+
+## ⚙️ Architecture
+
+| Component Group | Signal | Target Display Output | Modulo Property (M) | Bit-Width (N) |
 | :--- | :--- | :--- | :--- | :--- |
 | 🔴 **Minutes Tens** | `minTens` | `HEX3` (Tens Position) | `M => 6` | `N => 4` |
 | 🔴 **Minutes Ones** | `minOnes` | `HEX2` (Ones Position) | `M => 10` | `N => 4` |
@@ -29,19 +30,19 @@ Built upon an instructor-provided template, this project expands the base code i
 ## 🔬 Hardware Verification & Implementation
 
 * **7-Segment Display Drivers:** Active-low mapping arrays for display output from `0` to `F`.
-* **Frequency Adjustment:** Configurable generics for simulation versus real-world 50 MHz physical clock inputs.
-
+* **Frequency Adjustment**: Clock divider implemented using configurable generics to support both simulation and hardware operation.
+* **Functional Testing**: Verified counter rollover behavior and display outputs during simulation and FPGA deployment.
 ---
 
 ## 🔧 Target System Tools
 
-* **Software Ecosystem:** Intel Quartus Prime Toolchain
+* **Development Tools:** Intel Quartus Prime Toolchain
 * **Hardware Language:** VHDL-1993 / IEEE standard libraries (`std_logic_1164`, `numeric_std`)
 * **Target Interface:** FPGA Board 7-Segment Displays (`HEX0` - `HEX3`)
 
 ---
 
-## 💻 Target Deployment Hardware
+## 💻 Hardware Platform
 
 * **Development Board:** Terasic DE10-Lite
 * **Onboard FPGA:** Intel MAX 10 (10M50DAF484C7G)
