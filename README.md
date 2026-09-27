@@ -11,7 +11,7 @@ The design uses a clock divider, counters for the seconds and minutes rollover, 
 * **Minutes and Seconds Tracking:** Separate counter stages for minute tens, minute ones, second tens, and second ones.
 * **Rollover Logic:** Counters automatically reset and carry over when seconds hit 59 and minutes hit 59.
 * **7-Segment Display Decoding:** Built-in multiplexing/decoding to output numbers directly to the board's display digits.
-* **Simulation/Hardware Modes:** Uses a configurable generic for the clock divider so it can run fast in simulation but count real seconds on the board.
+* **Simulation/Hardware Modes:** Uses a configurable generic for the clock divider. Allows for switching between faster counting for simulations and real seconds on the board.
 
 ---
 
