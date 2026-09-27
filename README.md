@@ -1,50 +1,49 @@
 # ⏱️ VHDL Four-Digit Digital Timer
 
-A four-digit MM:SS digital timer implemented in VHDL and deployed on a DE10-Lite FPGA development board.
+A four-digit MM:SS digital timer implemented in VHDL and deployed on a DE10-Lite FPGA development board for my digital systems lab.
 
-The design uses cascaded modulo counters, clock division logic, and 7-segment display drivers to track and display elapsed time. The project was completed as part of a Digital Systems course lab.
+The design uses a clock divider, counters for the seconds and minutes rollover, and 7-segment display decoders to track and show elapsed time.
 
 ---
 
-## 🚀 Key Features
+## 🚀 Features
 
-* Cascaded modulo counters for seconds and minutes rollover.
-* Independent counter stages for minute tens, minute ones, second tens, and second ones.
-* 7-segment display decoding for FPGA display output.
-* Configurable clock division for simulation and hardware deployment.
-  
+* **Minutes and Seconds Tracking:** Separate counter stages for minute tens, minute ones, second tens, and second ones.
+* **Rollover Logic:** Counters automatically reset and carry over when seconds hit 59 and minutes hit 59.
+* **7-Segment Display Decoding:** Built-in multiplexing/decoding to output numbers directly to the board's display digits.
+* **Simulation/Hardware Modes:** Uses a configurable generic for the clock divider so it can run fast in simulation but count real seconds on the board.
+
 ---
 
 ## ⚙️ Architecture
 
-| Component Group | Signal | Target Display Output | Modulo Property (M) | Bit-Width (N) |
-| :--- | :--- | :--- | :--- | :--- |
-| 🔴 **Minutes Tens** | `minTens` | `HEX3` (Tens Position) | `M => 6` | `N => 4` |
-| 🔴 **Minutes Ones** | `minOnes` | `HEX2` (Ones Position) | `M => 10` | `N => 4` |
-| 🔵 **Seconds Tens** | `secTens` | `HEX1` (Tens Position) | `M => 6` | `N => 4` |
-| 🔵 **Seconds Ones** | `secOnes` | `HEX0` (Ones Position) | `M => 10` | `N => 4` |
-| 🟢 **System Clock Divider** | `prescalar` | Internal Driver | Variable | `N => 26` |
+| Component | Target Display | Max Count (Modulo) |
+| :--- | :--- | :---: |
+| **Minutes Tens** | `HEX3` | 6 |
+| **Minutes Ones** | `HEX2` | 10 |
+| **Seconds Tens** | `HEX1` | 6 |
+| **Seconds Ones** | `HEX0` | 10 |
 
 ---
 
-## 🔬 Hardware Verification & Implementation
+## 🔬 Testing
 
-* **7-Segment Display Drivers:** Active-low mapping arrays for display output from `0` to `F`.
-* **Frequency Adjustment**: Clock divider implemented using configurable generics to support both simulation and hardware operation.
-* **Functional Testing**: Verified counter rollover behavior and display outputs during simulation and FPGA deployment.
----
+### 💻 Simulation 
 
-## 🔧 Target System Tools
+* Adjusted the clock divider generic to test the counter rollovers quickly without waiting for a real 50 MHz clock cycle.
+* Verified that the active-low display outputs correctly mapped to numbers 0-9.
 
-* **Development Tools:** Intel Quartus Prime Toolchain
-* **Hardware Language:** VHDL-1993 / IEEE standard libraries (`std_logic_1164`, `numeric_std`)
-* **Target Interface:** FPGA Board 7-Segment Displays (`HEX0` - `HEX3`)
+### 🛠️ Hardware Testing (Intel MAX 10 FPGA)
 
----
+* Tested on a physical **Terasic DE10-Lite FPGA board with Intel MAX 10 FPGA**
+* Programmed with **Intel Quartus Prime**
+* Tied timer operation to a slide switch to pause/run, used a pushbutton for hardware reset, and routed the real-time count directly to the four built-in 7-segment displays.
 
-## 💻 Hardware Platform
+### FPGA Pin Assignments
 
-* **Development Board:** Terasic DE10-Lite
-* **Onboard FPGA:** Intel MAX 10 (10M50DAF484C7G)
-* **Hardware Clock Frequency:** 50 MHz Onboard Oscillator (`MAX10_CLK1_50`)
-* **Display Configuration:** 4x Built-In Common-Anode 7-Segment Digit Arrays
+| Port | Hardware | Description |
+| :--- | :--- | :--- |
+| **`clock`** | `MAX10_CLK1_50` | Onboard 50 MHz Clock Source |
+| **`run_timer`** | Switch 4 | Run / Pause Toggle |
+| **`l_reset`** | Key 0 | Active-Low Hardware Reset |
+| **`HEX0 - HEX3`** | Seven Segment Displays | 4-Digit Time Output (MM:SS) |
